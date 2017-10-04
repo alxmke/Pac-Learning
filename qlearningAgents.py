@@ -16,7 +16,7 @@ from game import *
 from learningAgents import ReinforcementAgent
 from featureExtractors import *
 
-import random,util,math
+import random, util, math
 
 class QLearningAgent(ReinforcementAgent):
     """
@@ -63,6 +63,9 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
+        #Q_k+1(s,a) = sum_s' T(s,a,s')[R(s,a,s')+gamma*V(s')]
+        return sum([succ_trans_prob*(self.mdp.getReward(state,action,succ_state)+self.discount*self.getValue(succ_state)) for succ_state, succ_trans_prob in self.mdp.getTransitionStatesAndProbs(state, action)])
+
 
     def computeActionFromQValues(self, state):
         """
@@ -72,6 +75,11 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
+        #pi(s) = argmax_a Q(s,a)
+        possible_actions = self.mdp.getPossibleActions(state)
+        if not possible_actions: return None
+        return max([(self.getQValue(state,action),action) for action in possible_actions], key=operator.itemgetter(0))[1]
+
 
     def getAction(self, state):
         """
